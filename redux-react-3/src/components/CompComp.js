@@ -1,13 +1,45 @@
 import React from "react";
 import { connect } from "react-redux";
+import { sellComp } from "../redux/actions/actions";
 
-const CompComp = () => {
+const CompComp = (props) => {
   const [number, setNumber] = React.useState(1);
   return (
     <div className="container">
-      <h3>Computer</h3>
+      <h2>Computers [Pure Redux]</h2>
+      <h3>
+        Number of Computers :
+        <span className="number">{props.numberOfComp}</span>
+      </h3>
+      <input
+        type="number"
+        value={number}
+        onChange={(e) => setNumber(e.target.value)}
+      />
+      <br />
+      <button
+        onClick={() => {
+          console.log(number);
+          console.log(props.numberOfComp);
+          props.sellComp(number);
+        }}
+      >
+        Sell {number} {number > 1 ? "Comps" : "Comp"}
+      </button>
     </div>
   );
 };
 
-export default CompComp;
+const mapStateToProps = (state) => {
+  return {
+    numberOfComp: state.comp.numberOfComp,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    sellComp: (number) => dispatch(sellComp(number)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompComp);
